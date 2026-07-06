@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>daily-planner 使用指南</title>
+<style>
+  :root {
+    --primary: #6366f1;
+    --primary-light: #a5b4fc;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+    --accent-green: #22c55e;
+    --accent-orange: #f59e0b;
+    --accent-red: #ef4444;
+    --accent-blue: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .hero {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    border-radius: 16px;
+    margin-bottom: 2.5rem;
+    color: white;
+  }
+  .hero h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+  .hero p { font-size: 1.1rem; opacity: 0.9; }
+  .hero .tagline { font-size: 1.3rem; font-weight: 600; margin-top: 0.8rem; }
+
+  h2 {
+    font-size: 1.5rem;
+    color: var(--primary);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--primary-light);
+  }
+  h3 {
+    font-size: 1.2rem;
+    color: var(--text);
+    margin: 1.5rem 0 0.8rem;
+  }
+  p { margin: 0.8rem 0; }
+  ul, ol { margin: 0.5rem 0 0.5rem 1.5rem; }
+  li { margin: 0.3rem 0; }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .template-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .template-card:hover { border-color: var(--primary); }
+  .template-card .tc-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .template-card .tc-name {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+  .template-card .tc-target {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  .template-card .tc-levels {
+    font-size: 0.85rem;
+    color: var(--primary);
+  }
+
+  .step-list {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+  }
+  .step-list li {
+    counter-increment: step;
+    position: relative;
+    padding: 1rem 1rem 1rem 3.5rem;
+    margin: 0.8rem 0;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    width: 2rem;
+    height: 2rem;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .step-list li .step-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .step-list li .step-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+  }
+
+  .feature-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin: 0.6rem 0;
+  }
+  .feature-box .fb-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+  }
+  .feature-box .fb-title {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .feature-box .fb-desc {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  .comparison-table th {
+    background: var(--primary);
+    color: white;
+    padding: 0.8rem;
+    text-align: left;
+    font-size: 0.9rem;
+  }
+  .comparison-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .comparison-table tr:hover td { background: #f1f5f9; }
+
+  .callout {
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    font-size: 0.95rem;
+  }
+  .callout-blue {
+    background: #dbeafe;
+    border-color: #93c5fd;
+  }
+  .callout-green {
+    background: #dcfce7;
+    border-color: #86efac;
+  }
+
+  .faq-item {
+    margin: 1rem 0;
+  }
+  .faq-q {
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.3rem;
+  }
+  .faq-a {
+    color: var(--text-secondary);
+    padding-left: 1rem;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  code {
+    background: #f1f5f9;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+  }
+  strong { color: var(--primary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🎯 daily-planner</h1>
+  <p>目标驱动的每日自律系统</p>
+  <div class="tagline">把任何目标拆成每天能执行的动作，用游戏化追踪 + AI督促保证落地</div>
+</div>
+
+<h2>这是什么？</h2>
+
+<p>daily-planner 是一个 <strong>WorkBuddy Skill</strong>（技能插件），帮你把大目标拆解成每天能执行的小动作。不只是生成一个任务清单——它会：</p>
+
+<div class="feature-box">
+  <div class="fb-icon">🧠</div>
+  <div>
+    <div class="fb-title">帮你诊断现状、确定方向</div>
+    <div class="fb-desc">通过AI访谈，帮你理清自己真正要做什么、怎么分配时间和精力</div>
+  </div>
+</div>
+<div class="feature-box">
+  <div class="fb-icon">📋</div>
+  <div>
+    <div class="fb-title">拆解阶段、定制每日时间表</div>
+    <div class="fb-desc">根据你的作息和紧迫程度，把90天（或30天/180天）拆成可执行的阶段</div>
+  </div>
+</div>
+<div class="feature-box">
+  <div class="fb-icon">🎮</div>
+  <div>
+    <div class="fb-title">游戏化任务追踪器</div>
+    <div class="fb-desc">完成任务赚XP、升级、解锁成就——像打游戏一样推进你的目标</div>
+  </div>
+</div>
+<div class="feature-box">
+  <div class="fb-icon">🤖</div>
+  <div>
+    <div class="fb-title">可选的AI日常督促</div>
+    <div class="fb-desc">每天早晚报、每周复盘，AI主动问你进展、帮你调整计划</div>
+  </div>
+</div>
+
+<h2>适合谁？</h2>
+
+<div class="card-grid">
+  <div class="template-card">
+    <div class="tc-icon">🏢</div>
+    <div class="tc-name">创业转型</div>
+    <div class="tc-target">创业者/小老板</div>
+    <div class="tc-levels">新手创业者 → 转型大师</div>
+  </div>
+  <div class="template-card">
+    <div class="tc-icon">💻</div>
+    <div class="tc-name">技能深耕</div>
+    <div class="tc-target">大学生/职场新人</div>
+    <div class="tc-levels">入门学徒 → 技能大师</div>
+  </div>
+  <div class="template-card">
+    <div class="tc-icon">📚</div>
+    <div class="tc-name">考试冲刺</div>
+    <div class="tc-target">考研考公考证</div>
+    <div class="tc-levels">备考新手 → 上岸达人</div>
+  </div>
+  <div class="template-card">
+    <div class="tc-icon">💪</div>
+    <div class="tc-name">身材管理</div>
+    <div class="tc-target">减肥健身</div>
+    <div class="tc-levels">新手小白 → 身材达人</div>
+  </div>
+  <div class="template-card">
+    <div class="tc-icon">💰</div>
+    <div class="tc-name">副业启动</div>
+    <div class="tc-target">职场人/自由职业</div>
+    <div class="tc-levels">副业新手 → 独立创收</div>
+  </div>
+  <div class="template-card">
+    <div class="tc-icon">📱</div>
+    <div class="tc-name">自媒体IP</div>
+    <div class="tc-target">想做个人IP的人</div>
+    <div class="tc-levels">IP新手 → 影响力达人</div>
+  </div>
+  <div class="template-card" style="border-color: var(--primary);">
+    <div class="tc-icon">✨</div>
+    <div class="tc-name">自定义</div>
+    <div class="tc-target">任何人，任何目标</div>
+    <div class="tc-levels">AI帮你构建专属模板</div>
+  </div>
+</div>
+
+<h2>如何使用？</h2>
+
+<h3>前提条件</h3>
+<div class="callout callout-blue">
+  你需要先安装 <strong>WorkBuddy</strong>（AI桌面助手），并安装 daily-planner 这个 Skill。安装完成后，在任意对话窗口输入 <code>daily-planner</code> 或 <code>每日规划</code> 即可启动。
+</div>
+
+<h3>启动后的流程</h3>
+
+<ol class="step-list">
+  <li>
+    <div class="step-title">功能介绍</div>
+    <div class="step-desc">AI 会简单介绍自己的功能，告诉你接下来会做什么</div>
+  </li>
+  <li>
+    <div class="step-title">选择模板</div>
+    <div class="step-desc">从7套模板中选一个最贴合你目标的，或者选"自定义"</div>
+  </li>
+  <li>
+    <div class="step-title">模板专属访谈</div>
+    <div class="step-desc">AI 会根据你选的模板追问3-5个关键问题，帮你理清现状和目标。这不是填问卷——是像朋友聊天一样帮你想清楚</div>
+  </li>
+  <li>
+    <div class="step-title">通用执行力问题</div>
+    <div class="step-desc">作息习惯、容易卡住的点、想要的督促强度——所有人都会问这几个</div>
+  </li>
+  <li>
+    <div class="step-title">选择自动化模式</div>
+    <div class="step-desc">
+      <strong>轻量版</strong>：只用追踪器HTML，自己打卡<br>
+      <strong>完整版</strong>：追踪器 + AI早晚报督促 + 每周复盘
+    </div>
+  </li>
+  <li>
+    <div class="step-title">生成你的专属规划</div>
+    <div class="step-desc">
+      ① 现状诊断 + 目标拆解 + 阶段规划（对话中直接输出）<br>
+      ② 每日时间表（对话中直接输出）<br>
+      ③ 游戏化任务追踪器HTML（生成文件，浏览器打开即可使用）<br>
+      ④ 如果选完整版，自动设定早晚报和周复盘的时间
+    </div>
+  </li>
+  <li>
+    <div class="step-title">日常运行</div>
+    <div class="step-desc">每天打开追踪器打卡，AI按时来问你进展，随时可以调整计划</div>
+  </li>
+</ol>
+
+<h2>追踪器功能</h2>
+
+<p>生成的追踪器是一个 <strong>HTML文件</strong>，浏览器直接打开，不需要安装任何东西。核心功能：</p>
+
+<div class="card">
+  <h3>🎮 游戏化系统</h3>
+  <ul>
+    <li><strong>XP经验值</strong>：完成任务赚XP，不同任务XP不同（核心任务30XP，日常任务10-15XP）</li>
+    <li><strong>等级系统</strong>：累计XP达到阈值自动升级，每套模板有专属等级名</li>
+    <li><strong>成就徽章</strong>：达成特定条件自动解锁（连续打卡、早起鸟、阶段完成等）</li>
+    <li><strong>每日重置</strong>：每天0点任务勾选状态重置，XP和等级永久保留</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>📊 追踪功能</h3>
+  <ul>
+    <li><strong>任务分类</strong>：晨间/核心/运营/晚间四个时段，一目了然</li>
+    <li><strong>星期主题日</strong>：每天有不同的侧重（规划日、深度日、实验日等）</li>
+    <li><strong>阶段任务</strong>：当前阶段的核心目标展示在页面上</li>
+    <li><strong>自定义增删</strong>：随时增删改任务，追踪器完全可控</li>
+  </ul>
+</div>
+
+<div class="callout callout-green">
+  💡 <strong>数据安全</strong>：所有数据保存在浏览器 localStorage 中，关闭浏览器不会丢失。同一台电脑同一个浏览器，数据持久保存。换浏览器或换电脑数据不跟随——后续计划做成多用户网站解决这个问题。
+</div>
+
+<h2>两种模式对比</h2>
+
+<table class="comparison-table">
+  <tr>
+    <th>功能</th>
+    <th>轻量版</th>
+    <th>完整版</th>
+  </tr>
+  <tr>
+    <td>游戏化追踪器</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>现状诊断 + 目标拆解</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>每日时间表</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>阶段规划</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+  <tr>
+    <td>AI早报督促</td>
+    <td>❌</td>
+    <td>✅ 每天早上定时提醒</td>
+  </tr>
+  <tr>
+    <td>AI晚报复盘</td>
+    <td>❌</td>
+    <td>✅ 每天晚上定时复盘</td>
+  </tr>
+  <tr>
+    <td>每周深度复盘</td>
+    <td>❌</td>
+    <td>✅ 每周日晚</td>
+  </tr>
+  <tr>
+    <td>随时找AI调整</td>
+    <td>✅</td>
+    <td>✅</td>
+  </tr>
+</table>
+
+<div class="callout">
+  ⚠️ <strong>完整版需要 WorkBuddy 的自动化功能</strong>。如果你用的是轻量版，虽然没有定时督促，但你随时可以在对话中找 AI 帮你调整任务、讨论进展。
+</div>
+
+<h2>自定义模板构建器</h2>
+
+<p>如果你的目标不在6套预置模板里，选<strong>"自定义"</strong>。AI 会追问你5个方面的问题：</p>
+
+<ol>
+  <li><strong>目标定义</strong>：你想达成什么？描述得越具体越好</li>
+  <li><strong>现状评估</strong>：你现在离目标有多远？有什么优势和短板？</li>
+  <li><strong>时间投入</strong>：每天能拿出多少时间？有没有固定时段？</li>
+  <li><strong>紧迫程度</strong>：有多紧迫？压力有多大？</li>
+  <li><strong>动机来源</strong>：为什么想做这件事？</li>
+</ol>
+
+<p>然后 AI 会自动帮你生成：</p>
+<ul>
+  <li>专属等级线（5-8个等级，用你目标领域的名称）</li>
+  <li>专属成就徽章（6-10个，覆盖初期打卡到后期达标）</li>
+  <li>专属每日任务模板（10-15个，分时段）</li>
+  <li>专属阶段规划（2-4个阶段）</li>
+</ul>
+
+<div class="callout callout-green">
+  🔄 <strong>所有内容都可以后续调整</strong>。模板不是锁死的——随时增删改任务、调整等级、修改阶段。
+</div>
+
+<h2>常见问题</h2>
+
+<div class="faq-item">
+  <div class="faq-q">Q：需要付费吗？</div>
+  <div class="faq-a">daily-planner 是免费的 Skill 插件。但需要 WorkBuddy 本身（WorkBuddy 有免费版和付费版，自动化功能需要付费版）。</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Q：我的数据会泄露吗？</div>
+  <div class="faq-a">追踪器数据全保存在你浏览器本地（localStorage），不上传到任何服务器。AI督促的对话内容在 WorkBuddy 本地处理。</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Q：换了电脑数据怎么办？</div>
+  <div class="faq-a">目前数据绑定浏览器，换电脑需要重新设定。后续计划做成PHP+MySQL多用户网站，届时数据会跟随账号。</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Q：我可以同时用多套模板吗？</div>
+  <div class="faq-a">目前一次只生成一套追踪器。但你可以随时找 AI 调整任务内容——比如在创业转型模板里加入健身任务。</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Q：AI督促的时间可以改吗？</div>
+  <div class="faq-a">可以。初始化时会问你的作息，根据你的时间设定。后续也可以随时修改——在对话里跟 AI 说一声就行。</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Q：我只想要追踪器，不想被AI每天问，行吗？</div>
+  <div class="faq-a">行。选轻量版就行——只生成追踪器HTML，你自己打卡，不设定任何自动化。</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">Q：Skill 怎么安装？</div>
+  <div class="faq-a">在 WorkBuddy 中打开「技能管理」或对话中输入相关安装指令，将 skill 文件放到 <code>~/.workbuddy/skills/daily-planner/</code> 目录下即可。也可以直接把整个 skill 文件夹发给你的朋友，让他们放到对应目录。</div>
+</div>
+
+<h2>一句话总结</h2>
+
+<div class="card" style="text-align: center; padding: 2rem; font-size: 1.2rem; border-color: var(--primary);">
+  <p><strong>选一个模板 → 跟AI聊几分钟 → 拿到你的专属追踪器 → 开始每天执行</strong></p>
+  <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem;">目标太大不是问题，问题是没有每天推进的动作。daily-planner 帮你把大目标变成小动作。</p>
+</div>
+
+<div class="footer">
+  daily-planner v1.0 · 由 WorkBuddy Skill 驱动 · 2026
+</div>
+
+</body>
+</html>

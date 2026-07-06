@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日任务追踪</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;background:#eef2f6;color:#1e293b;line-height:1.7;-webkit-font-smoothing:antialiased}
+.app{max-width:520px;margin:0 auto;padding:16px}
+
+.top-bar{background:linear-gradient(135deg,#1e40af,#0f6e56);color:#fff;padding:18px 20px;border-radius:14px;margin-bottom:14px}
+.date-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.date-text{font-size:15px;font-weight:500}
+.day-theme{font-size:13px;background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:12px}
+.level-row{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.level-badge{background:#f59e0b;color:#fff;font-size:13px;font-weight:500;padding:4px 12px;border-radius:16px;white-space:nowrap}
+.level-title{font-size:15px;font-weight:500}
+.xp-bar-wrap{background:rgba(255,255,255,0.15);border-radius:8px;height:8px;overflow:hidden;margin-bottom:8px}
+.xp-bar-fill{background:#f59e0b;height:100%;border-radius:8px;transition:width 0.6s ease}
+.stats-row{display:flex;gap:16px;font-size:13px}
+.stat-item{display:flex;align-items:center;gap:4px}
+.stat-icon{width:16px;height:16px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;background:rgba(255,255,255,0.2)}
+
+.focus-banner{background:#fff;border-radius:12px;padding:14px 18px;margin-bottom:14px;border-left:4px solid #1e40af}
+.focus-title{font-size:14px;font-weight:500;color:#1e40af;margin-bottom:4px}
+.focus-desc{font-size:13px;color:#64748b}
+
+.progress-section{background:#fff;border-radius:12px;padding:14px 18px;margin-bottom:14px}
+.progress-bar-wrap{background:#e2e8f0;border-radius:8px;height:12px;overflow:hidden;margin-bottom:8px}
+.progress-bar-fill{background:linear-gradient(90deg,#3b82f6,#0f6e56);height:100%;border-radius:8px;transition:width 0.5s ease}
+.progress-text{font-size:13px;color:#64748b;display:flex;justify-content:space-between}
+
+.quest-section{background:#fff;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cat-title{font-size:15px;font-weight:500;color:#1e293b}
+.cat-count{font-size:12px;color:#94a3b8}
+.quest-item{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:opacity 0.3s}
+.quest-item:last-child{border-bottom:none}
+.quest-item.completed{opacity:0.5}
+.quest-checkbox{width:22px;height:22px;border-radius:6px;border:2px solid #cbd5e1;margin-right:12px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0}
+.quest-item.completed .quest-checkbox{background:#22c55e;border-color:#22c55e}
+.quest-check-icon{color:#fff;font-size:14px;font-weight:500;display:none}
+.quest-item.completed .quest-check-icon{display:block}
+.quest-content{flex:1}
+.quest-title{font-size:14px;font-weight:500;color:#1e293b;transition:all 0.2s}
+.quest-item.completed .quest-title{text-decoration:line-through;color:#94a3b8}
+.quest-desc{font-size:12px;color:#64748b}
+.custom-tag{font-size:10px;background:#e0e7ff;color:#4338ca;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.quest-xp{font-size:12px;font-weight:500;color:#f59e0b;margin-left:auto;flex-shrink:0;padding-left:8px}
+.quest-item.completed .quest-xp{color:#94a3b8}
+.quest-delete{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px;color:#cbd5e1;font-size:16px;cursor:pointer;border-radius:4px;transition:all 0.15s}
+.quest-delete:hover{color:#ef4444;background:#fef2f2}
+.quest-edit{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:4px;color:#cbd5e1;font-size:13px;cursor:pointer;border-radius:4px;transition:all 0.15s}
+.quest-edit:hover{color:#3b82f6;background:#eff6ff}
+
+.add-task-btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;margin-top:8px;border:1px dashed #cbd5e1;border-radius:8px;cursor:pointer;font-size:13px;color:#64748b;transition:all 0.2s}
+.add-task-btn:hover{border-color:#3b82f6;color:#3b82f6;background:#eff6ff}
+
+.add-task-form{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin-top:8px}
+.add-task-form select,.add-task-form input,.add-task-form textarea{width:100%;padding:8px 10px;border:1px solid #cbd5e1;border-radius:6px;font-size:13px;font-family:inherit;margin-bottom:8px;background:#fff}
+.add-task-form input:focus,.add-task-form textarea:focus,.add-task-form select:focus{outline:none;border-color:#3b82f6}
+.add-task-form label{font-size:12px;color:#64748b;margin-bottom:3px;display:block}
+.form-row{display:flex;gap:8px;margin-bottom:8px}
+.form-row>div{flex:1}
+.form-row>div:last-child{flex:0 0 80px}
+.form-actions{display:flex;gap:8px;justify-content:flex-end}
+.form-btn{padding:6px 16px;border-radius:6px;font-size:13px;cursor:pointer;border:none;font-family:inherit}
+.form-btn.primary{background:#3b82f6;color:#fff}
+.form-btn.secondary{background:#e2e8f0;color:#475569}
+
+.xp-popup{position:fixed;color:#f59e0b;font-size:16px;font-weight:500;pointer-events:none;z-index:9999;animation:xpFloat 1.2s ease forwards}
+@keyframes xpFloat{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-40px)}}
+
+.levelup-banner{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;padding:24px 32px;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.2);z-index:9999;text-align:center;animation:bannerPop 0.3s ease}
+.levelup-banner h3{font-size:18px;color:#1e40af;margin-bottom:6px}
+.levelup-banner p{font-size:14px;color:#64748b}
+@keyframes bannerPop{0%{opacity:0;transform:translate(-50%,-50%) scale(0.8)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+
+.phase-section{background:#fff;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.phase-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.phase-title{font-size:15px;font-weight:500;color:#1e293b}
+.phase-select{font-size:13px;padding:4px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;color:#475569}
+.phase-info{font-size:12px;color:#64748b;margin-bottom:12px}
+
+.achieve-section{background:#fff;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.achieve-title{font-size:15px;font-weight:500;color:#1e293b;margin-bottom:12px}
+.achieve-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.achieve-item{padding:10px;border-radius:8px;text-align:center;font-size:12px;transition:all 0.2s}
+.achieve-item.locked{background:#f1f5f9;color:#94a3b8;border:1px solid #e2e8f0}
+.achieve-item.unlocked{background:#f0fdf4;color:#166534;border:1px solid #86efac}
+.achieve-name{font-weight:500;margin-bottom:2px}
+.achieve-desc{font-size:11px}
+
+.footer{text-align:center;padding:16px;font-size:12px;color:#94a3b8;margin-top:8px}
+
+@media(max-width:400px){
+  .app{padding:10px}
+  .top-bar{padding:14px 16px}
+  .stats-row{gap:8px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-bar">
+    <div class="date-row">
+      <span class="date-text" id="dateText"></span>
+      <span class="day-theme" id="dayTheme"></span>
+    </div>
+    <div class="level-row">
+      <span class="level-badge" id="levelBadge">Lv.1</span>
+      <span class="level-title" id="levelTitle"></span>
+    </div>
+    <div class="xp-bar-wrap"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
+    <div class="stats-row">
+      <span class="stat-item"><span class="stat-icon">XP</span><span id="totalXPText">0</span></span>
+      <span class="stat-item"><span class="stat-icon">S</span><span id="streakText">0天</span></span>
+      <span class="stat-item"><span class="stat-icon">A</span><span id="achieveCountText">0/0</span></span>
+    </div>
+  </div>
+
+  <div class="focus-banner" id="focusBanner">
+    <div class="focus-title" id="focusTitle"></div>
+    <div class="focus-desc" id="focusDesc"></div>
+  </div>
+
+  <div class="progress-section">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-text">
+      <span id="progressCount">今日完成: 0/0</span>
+      <span id="progressXP">今日XP: 0/0</span>
+    </div>
+  </div>
+
+  <div id="questSections"></div>
+
+  <div class="phase-section" id="phaseSection">
+    <div class="phase-header">
+      <span class="phase-title">阶段任务</span>
+      <select class="phase-select" id="phaseSelect"></select>
+    </div>
+    <div class="phase-info" id="phaseInfo"></div>
+    <div id="phaseTasks"></div>
+  </div>
+
+  <div class="achieve-section">
+    <div class="achieve-title">成就徽章</div>
+    <div class="achieve-grid" id="achieveGrid"></div>
+  </div>
+
+  <div class="footer" id="footerText"></div>
+</div>
+
+<script>
+// ============================================================
+// CONFIG — All personalized data is injected here by the skill
+// ============================================================
+const CONFIG = {
+  title: "每日任务追踪",
+  storageKey: "dailyPlannerState",
+  levels: [
+    {"lv":1,"name":"新手","min":0},
+    {"lv":2,"name":"起步者","min":500},
+    {"lv":3,"name":"坚持者","min":1500},
+    {"lv":4,"name":"进阶者","min":3000},
+    {"lv":5,"name":"高手","min":5000},
+    {"lv":6,"name":"达人","min":8000},
+    {"lv":7,"name":"大师","min":12000}
+  ],
+  categories: {
+    morning: {"label":"晨间任务","color":"#f59e0b"},
+    core: {"label":"核心工作","color":"#ef4444"},
+    ops: {"label":"运营管理","color":"#3b82f6"},
+    evening: {"label":"晚间任务","color":"#22c55e"}
+  },
+  defaultTasks: [
+    {"id":"dt_1","cat":"morning","title":"起床打卡","xp":10,"desc":"固定时间起床"},
+    {"id":"dt_2","cat":"morning","title":"学习/回顾","xp":10,"desc":"回顾昨日完成情况"},
+    {"id":"dt_3","cat":"core","title":"核心任务推进","xp":30,"desc":"推进最重要的工作"},
+    {"id":"dt_4","cat":"ops","title":"日常运营","xp":15,"desc":"处理日常事务"},
+    {"id":"dt_5","cat":"evening","title":"日复盘","xp":10,"desc":"回顾今天，规划明天"},
+    {"id":"dt_6","cat":"evening","title":"运动 30分钟","xp":15,"desc":"运动放松"},
+    {"id":"dt_7","cat":"evening","title":"入睡打卡","xp":10,"desc":"在目标时间前入睡"}
+  ],
+  achievements: [
+    {"id":"a1","name":"初次打卡","desc":"完成第一个任务","checkType":"first_task"},
+    {"id":"a2","name":"半程选手","desc":"单日完成50%任务","checkType":"half_day"},
+    {"id":"a3","name":"全勤日","desc":"单日完成全部任务","checkType":"full_day"},
+    {"id":"a4","name":"连续3天","desc":"连续3天至少完成1个任务","checkType":"streak","checkParam":3},
+    {"id":"a5","name":"连续7天","desc":"连续7天打卡","checkType":"streak","checkParam":7},
+    {"id":"a6","name":"连续14天","desc":"连续14天打卡","checkType":"streak","checkParam":14},
+    {"id":"a7","name":"连续30天","desc":"坚持30天不间断","checkType":"streak","checkParam":30},
+    {"id":"a8","name":"早起鸟","desc":"连续7天完成起床任务","checkType":"consecutive_task","checkParam":{"titleKeyword":"起床","days":7}},
+    {"id":"a9","name":"运动达人","desc":"连续7天完成运动任务","checkType":"consecutive_task","checkParam":{"titleKeyword":"运动","days":7}},
+    {"id":"a10","name":"学习达人","desc":"累计学习打卡10次以上","checkType":"total_task_count","checkParam":{"titleKeyword":"学习","count":10}},
+    {"id":"a11","name":"阶段完成","desc":"完成第一个阶段全部任务","checkType":"phase_complete","checkParam":0},
+    {"id":"a12","name":"等级5","desc":"达到Lv.5","checkType":"level","checkParam":5},
+    {"id":"a13","name":"万XP","desc":"累计获得10000 XP","checkType":"xp","checkParam":10000}
+  ],
+  phases: [
+    {"id":"p1","name":"第一阶段","weeks":"第 1-2 周","desc":"目标：建立习惯，基础搭建",
+      "tasks":[{"id":"p1t1","title":"完成基础准备工作","xp":30},{"id":"p1t2","title":"建立每日节奏","xp":20}]},
+    {"id":"p2","name":"第二阶段","weeks":"第 3-4 周","desc":"目标：深入推进，开始产出",
+      "tasks":[{"id":"p2t1","title":"持续推进核心项目","xp":30},{"id":"p2t2","title":"开始产出/输出","xp":30}]},
+    {"id":"p3","name":"第三阶段","weeks":"第 5-8 周","desc":"目标：优化提升，稳定运行",
+      "tasks":[{"id":"p3t1","title":"优化和迭代","xp":30},{"id":"p3t2","title":"复盘和调整","xp":20}]}
+  ],
+  dayThemes: {
+    "0":{"title":"周日 · 休息日","desc":"完全休息，恢复精力。只完成生活类任务即可"},
+    "1":{"title":"周一 · 规划日","desc":"制定周计划，回顾上周"},
+    "2":{"title":"周二 · 深度日","desc":"全天深度工作，专注最重要的事"},
+    "3":{"title":"周三 · 实验日","desc":"新方法测试、策略优化"},
+    "4":{"title":"周四 · 沟通日","desc":"对外沟通、合作对接"},
+    "5":{"title":"周五 · 复盘日","desc":"数据分析、周复盘、调整计划"},
+    "6":{"title":"周六 · 学习日","desc":"深度学习、行业研究"}
+  },
+  footerText: "每完成一个任务，你都在为目标铺路。坚持就是最大的杠杆。"
+};
+// ============================================================
+
+// Set page title
+document.title = CONFIG.title;
+
+// Dynamic task list: default + custom - deleted, with edit overrides
+function getAllTasks(){
+  const deleted = state.deletedTasks || [];
+  const custom = state.customTasks || [];
+  const overrides = state.editOverrides || {};
+  const merged = [...CONFIG.defaultTasks, ...custom].map(t => {
+    if(overrides[t.id]) return {...t, ...overrides[t.id]};
+    return t;
+  });
+  return merged.filter(t => !deleted.includes(t.id));
+}
+
+function getTotalDailyXP(){
+  return getAllTasks().reduce((s,t)=>s+t.xp,0);
+}
+
+function localDateStr(d){
+  const y=d.getFullYear();
+  const m=String(d.getMonth()+1).padStart(2,'0');
+  const day=String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
+function getToday(){return localDateStr(new Date())}
+function getYesterday(){const d=new Date();d.setDate(d.getDate()-1);return localDateStr(d)}
+function getDayOfWeek(){return new Date().getDay()}
+
+function getLevelInfo(xp){
+  let cur=CONFIG.levels[0];
+  for(let i=CONFIG.levels.length-1;i>=0;i--){
+    if(xp>=CONFIG.levels[i].min){cur=CONFIG.levels[i];break}
+  }
+  const next=CONFIG.levels.find(l=>l.lv===cur.lv+1);
+  const progress=next?(xp-cur.min)/(next.min-cur.min)*100:100;
+  return{...cur,next,progress:Math.min(progress,100)};
+}
+
+function getDailyCompleted(s){
+  return getAllTasks().filter(t=>s.dailyTasks[t.id]).length;
+}
+function getDailyXP(s){
+  return getAllTasks().filter(t=>s.dailyTasks[t.id]).reduce((sum,t)=>sum+t.xp,0);
+}
+
+// Find task by title keyword for achievement checks
+function findTaskByKeyword(keyword){
+  return getAllTasks().find(t=>t.title.includes(keyword));
+}
+
+function getConsecutiveTaskByKeyword(s,keyword){
+  const task=findTaskByKeyword(keyword);
+  if(!task)return 0;
+  let count=0;
+  if(s.dailyTasks[task.id])count++;
+  const dates=Object.keys(s.history||{}).sort().reverse();
+  for(const d of dates){
+    if(s.history[d]&&s.history[d].tasks&&s.history[d].tasks[task.id])count++;
+    else break;
+  }
+  return count;
+}
+
+function getTaskTotalCountByKeyword(s,keyword){
+  const task=findTaskByKeyword(keyword);
+  if(!task)return 0;
+  let count=s.dailyTasks[task.id]?1:0;
+  const dates=Object.keys(s.history||{}).sort().reverse();
+  for(const d of dates){
+    if(s.history[d]&&s.history[d].tasks&&s.history[d].tasks[task.id])count++;
+  }
+  return count;
+}
+
+function isPhaseComplete(s,phaseIdx){
+  if(!CONFIG.phases[phaseIdx])return false;
+  return CONFIG.phases[phaseIdx].tasks.every(t=>s.weeklyTasks[t.id]);
+}
+
+// Generic achievement checker
+function checkAchievement(achieve,s){
+  const type=achieve.checkType;
+  const param=achieve.checkParam;
+  switch(type){
+    case 'first_task': return s.totalXP>0;
+    case 'half_day': return getDailyCompleted(s)>=Math.ceil(getAllTasks().length/2);
+    case 'full_day': return getAllTasks().length>0&&getDailyCompleted(s)>=getAllTasks().length;
+    case 'streak': return s.streak>=param;
+    case 'consecutive_task': return getConsecutiveTaskByKeyword(s,param.titleKeyword)>=param.days;
+    case 'total_task_count': return getTaskTotalCountByKeyword(s,param.titleKeyword)>=param.count;
+    case 'phase_complete': return isPhaseComplete(s,param);
+    case 'level': return getLevelInfo(s.totalXP).lv>=param;
+    case 'xp': return s.totalXP>=param;
+    default: return false;
+  }
+}
+
+let state={
+  totalXP:0,
+  streak:0,
+  lastActiveDate:null,
+  dailyTasks:{},
+  weeklyTasks:{},
+  currentPhase:0,
+  achievements:{},
+  history:{},
+  customTasks:[],
+  deletedTasks:[],
+  editOverrides:{},
+};
+
+let editingTaskId = null;
+
+function loadState(){
+  try{
+    const saved=localStorage.getItem(CONFIG.storageKey);
+    if(saved){
+      const parsed=JSON.parse(saved);
+      state={...state,...parsed};
+      if(!state.customTasks)state.customTasks=[];
+      if(!state.deletedTasks)state.deletedTasks=[];
+      if(!state.editOverrides)state.editOverrides={};
+    }
+  }catch(e){}
+  const today=getToday();
+  if(state.lastActiveDate!==today){
+    if(state.lastActiveDate){
+      const completed=getDailyCompleted(state);
+      const xp=getDailyXP(state);
+      if(completed>0){
+        state.history[state.lastActiveDate]={completed,xp,completedIds:Object.keys(state.dailyTasks).filter(k=>state.dailyTasks[k]),tasks:{...state.dailyTasks}};
+      }
+    }
+    const yesterday=getYesterday();
+    if(state.lastActiveDate===yesterday&&getDailyCompleted(state)>0){
+      state.streak++;
+    }else if(state.lastActiveDate!==today){
+      if(Object.keys(state.history||{}).length>0){
+        const histDates=Object.keys(state.history).sort().reverse();
+        let consecutive=0;
+        const checkDate=new Date(yesterday);
+        for(let i=0;i<365;i++){
+          const ds=localDateStr(checkDate);
+          if(state.history[ds]&&state.history[ds].completed>0){consecutive++;checkDate.setDate(checkDate.getDate()-1)}
+          else break;
+        }
+        if(state.dailyTasks&&Object.values(state.dailyTasks).some(v=>v)){consecutive++}
+        state.streak=consecutive;
+      }else{state.streak=0}
+    }
+    state.dailyTasks={};
+    state.lastActiveDate=today;
+    saveState();
+  }
+}
+
+function saveState(){
+  try{localStorage.setItem(CONFIG.storageKey,JSON.stringify(state))}catch(e){}
+}
+
+function toggleDaily(taskId,xp){
+  const wasCompleted=state.dailyTasks[taskId];
+  state.dailyTasks[taskId]=!wasCompleted;
+  if(!wasCompleted){state.totalXP+=xp;showXPPopup(xp)}
+  else{state.totalXP-=xp}
+  if(!wasCompleted&&Object.values(state.dailyTasks).filter(v=>v).length===1){
+    state.lastActiveDate=getToday();
+  }
+  const prevLevel=getLevelInfo(state.totalXP-(wasCompleted?0:xp));
+  const newLevel=getLevelInfo(state.totalXP);
+  if(!wasCompleted&&newLevel.lv>prevLevel.lv){showLevelUp(newLevel)}
+  saveState();updateUI();checkAllAchievements();
+}
+
+function toggleWeekly(taskId,xp){
+  const wasCompleted=state.weeklyTasks[taskId];
+  state.weeklyTasks[taskId]=!wasCompleted;
+  if(!wasCompleted){state.totalXP+=xp;showXPPopup(xp)}
+  else{state.totalXP-=xp}
+  const prevLevel=getLevelInfo(state.totalXP-(wasCompleted?0:xp));
+  const newLevel=getLevelInfo(state.totalXP);
+  if(!wasCompleted&&newLevel.lv>prevLevel.lv){showLevelUp(newLevel)}
+  saveState();updateUI();checkAllAchievements();
+}
+
+function addCustomTask(title,desc,cat,xp){
+  const id='custom_'+Date.now();
+  const task={id,cat,title,xp:parseInt(xp)||10,desc:desc||'',custom:true};
+  state.customTasks.push(task);
+  saveState();updateUI();
+}
+
+function deleteTask(taskId){
+  const task=getAllTasks().find(t=>t.id===taskId);
+  if(!task)return;
+  if(state.dailyTasks[taskId]){
+    state.totalXP-=task.xp;
+    delete state.dailyTasks[taskId];
+  }
+  if(task.custom){
+    state.customTasks=state.customTasks.filter(t=>t.id!==taskId);
+  }else{
+    if(!state.deletedTasks)state.deletedTasks=[];
+    state.deletedTasks.push(taskId);
+  }
+  saveState();updateUI();
+}
+
+function showAddForm(catId){
+  document.querySelectorAll('.add-task-form').forEach(el=>el.remove());
+  document.querySelectorAll('.add-task-btn').forEach(el=>el.style.display='flex');
+  const btn=document.querySelector('[data-add-cat="'+catId+'"]');
+  if(!btn)return;
+  btn.style.display='none';
+  const form=document.createElement('div');
+  form.className='add-task-form';
+  // Build category select from CONFIG
+  let catOptions='';
+  for(const [key,val] of Object.entries(CONFIG.categories)){
+    catOptions+='<option value="'+key+'"'+(catId===key?' selected':'')+'>'+val.label+'</option>';
+  }
+  form.innerHTML=
+    '<label>任务名称</label>'+
+    '<input type="text" id="newTaskTitle" placeholder="比如：联系3个潜在客户" maxlength="40">'+
+    '<label>任务描述（可选）</label>'+
+    '<input type="text" id="newTaskDesc" placeholder="简要说明" maxlength="60">'+
+    '<div class="form-row">'+
+    '<div><label>分类</label>'+
+    '<select id="newTaskCat">'+catOptions+'</select></div>'+
+    '<div><label>XP</label>'+
+    '<input type="number" id="newTaskXP" value="15" min="5" max="50" style="width:100%"></div>'+
+    '</div>'+
+    '<div class="form-actions">'+
+    '<button class="form-btn secondary" onclick="cancelAddForm()">取消</button>'+
+    '<button class="form-btn primary" onclick="confirmAddTask()">添加</button>'+
+    '</div>';
+  btn.parentNode.insertBefore(form,btn);
+  setTimeout(()=>{const t=document.getElementById('newTaskTitle');if(t)t.focus()},50);
+}
+
+function cancelAddForm(){
+  document.querySelectorAll('.add-task-form').forEach(el=>el.remove());
+  document.querySelectorAll('.add-task-btn').forEach(el=>el.style.display='flex');
+}
+
+function confirmAddTask(){
+  const title=document.getElementById('newTaskTitle').value.trim();
+  const desc=document.getElementById('newTaskDesc').value.trim();
+  const cat=document.getElementById('newTaskCat').value;
+  const xp=document.getElementById('newTaskXP').value;
+  if(!title){alert('请输入任务名称');return}
+  addCustomTask(title,desc,cat,xp);
+  cancelAddForm();
+}
+
+function showEditForm(taskId){
+  editingTaskId = taskId;
+  updateUI();
+  setTimeout(()=>{
+    const t=document.getElementById('editTaskTitle');
+    if(t){t.focus();t.select()}
+  },50);
+}
+
+function cancelEditForm(){
+  editingTaskId = null;
+  updateUI();
+}
+
+function confirmEditTask(taskId){
+  const titleEl=document.getElementById('editTaskTitle');
+  const descEl=document.getElementById('editTaskDesc');
+  const catEl=document.getElementById('editTaskCat');
+  const xpEl=document.getElementById('editTaskXP');
+  if(!titleEl)return;
+  const title=titleEl.value.trim();
+  const desc=descEl.value.trim();
+  const cat=catEl.value;
+  const xp=parseInt(xpEl.value)||10;
+  if(!title){alert('请输入任务名称');return}
+
+  const task=getAllTasks().find(t=>t.id===taskId);
+  if(!task){editingTaskId=null;updateUI();return}
+
+  const oldXP=task.xp;
+  if(state.dailyTasks[taskId]&&xp!==oldXP){
+    state.totalXP+=(xp-oldXP);
+  }
+
+  if(task.custom){
+    const idx=state.customTasks.findIndex(t=>t.id===taskId);
+    if(idx>=0){
+      state.customTasks[idx]={...state.customTasks[idx],title,desc,cat,xp};
+    }
+  }else{
+    if(!state.editOverrides)state.editOverrides={};
+    state.editOverrides[taskId]={title,desc,cat,xp};
+  }
+  editingTaskId=null;
+  saveState();updateUI();
+}
+
+function renderEditForm(t){
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  let catOptions='';
+  for(const [key,val] of Object.entries(CONFIG.categories)){
+    catOptions+='<option value="'+key+'"'+(t.cat===key?' selected':'')+'>'+val.label+'</option>';
+  }
+  let html='<div class="add-task-form edit-task-form">';
+  html+='<label>任务名称</label>';
+  html+='<input type="text" id="editTaskTitle" placeholder="任务名称" maxlength="40" value="'+esc(t.title)+'">';
+  html+='<label>任务描述（可选）</label>';
+  html+='<input type="text" id="editTaskDesc" placeholder="简要说明" maxlength="60" value="'+esc(t.desc)+'">';
+  html+='<div class="form-row">';
+  html+='<div><label>分类</label>';
+  html+='<select id="editTaskCat">'+catOptions+'</select></div>';
+  html+='<div><label>XP</label>';
+  html+='<input type="number" id="editTaskXP" value="'+t.xp+'" min="5" max="50" style="width:100%"></div>';
+  html+='</div>';
+  html+='<div class="form-actions">';
+  html+='<button class="form-btn secondary" onclick="cancelEditForm()">取消</button>';
+  html+='<button class="form-btn primary" onclick="confirmEditTask(\''+t.id+'\')">保存</button>';
+  html+='</div>';
+  html+='</div>';
+  return html;
+}
+
+function showXPPopup(xp){
+  if(xp===0)return;
+  const el=document.createElement('div');
+  el.className='xp-popup';
+  el.textContent='+'+xp+' XP';
+  el.style.left=(Math.random()*200+120)+'px';
+  el.style.top=(Math.random()*200+100)+'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1300);
+}
+
+function showLevelUp(levelInfo){
+  const el=document.createElement('div');
+  el.className='levelup-banner';
+  el.innerHTML='<h3>等级提升!</h3><p>Lv.'+levelInfo.lv+' '+levelInfo.name+'</p>';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),3000);
+}
+
+function checkAllAchievements(){
+  CONFIG.achievements.forEach(a=>{
+    if(!state.achievements[a.id]&&checkAchievement(a,state)){
+      state.achievements[a.id]=true;
+      const el=document.createElement('div');
+      el.className='levelup-banner';
+      el.innerHTML='<h3>成就解锁!</h3><p>'+a.name+' - '+a.desc+'</p>';
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(),3000);
+    }
+  });
+  saveState();updateUI();
+}
+
+function updateUI(){
+  const allTasks=getAllTasks();
+  const totalXP=getTotalDailyXP();
+  const levelInfo=getLevelInfo(state.totalXP);
+  document.getElementById('levelBadge').textContent='Lv.'+levelInfo.lv;
+  document.getElementById('levelTitle').textContent=levelInfo.name;
+  document.getElementById('xpBarFill').style.width=levelInfo.progress+'%';
+  document.getElementById('totalXPText').textContent=state.totalXP+' XP';
+  document.getElementById('streakText').textContent=state.streak+'天';
+  const unlocked=CONFIG.achievements.filter(a=>state.achievements[a.id]).length;
+  document.getElementById('achieveCountText').textContent=unlocked+'/'+CONFIG.achievements.length;
+
+  const today=new Date();
+  const dayNames=['周日','周一','周二','周三','周四','周五','周六'];
+  document.getElementById('dateText').textContent=today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()+' '+dayNames[getDayOfWeek()];
+
+  // Day theme
+  const dow=String(getDayOfWeek());
+  const theme=CONFIG.dayThemes[dow]||CONFIG.dayThemes["1"]||{"title":"工作日","desc":"按计划执行"};
+  document.getElementById('focusTitle').textContent=theme.title;
+  document.getElementById('focusDesc').textContent=theme.desc;
+
+  const dailyCompleted=getDailyCompleted(state);
+  const dailyXPVal=getDailyXP(state);
+  const taskCount=allTasks.length;
+  document.getElementById('progressFill').style.width=(taskCount>0?dailyCompleted/taskCount*100:0)+'%';
+  document.getElementById('progressCount').textContent='今日完成: '+dailyCompleted+'/'+taskCount;
+  document.getElementById('progressXP').textContent='今日XP: '+dailyXPVal+'/'+totalXP;
+
+  // Phase section visibility
+  const phaseSection=document.getElementById('phaseSection');
+  if(CONFIG.phases&&CONFIG.phases.length>0){
+    phaseSection.style.display='block';
+  }else{
+    phaseSection.style.display='none';
+  }
+
+  // Footer
+  document.getElementById('footerText').textContent=CONFIG.footerText;
+
+  renderDailyQuests();
+  renderPhaseTasks();
+  renderAchievements();
+}
+
+function renderDailyQuests(){
+  const container=document.getElementById('questSections');
+  let html='';
+  const allTasks=getAllTasks();
+  // Render categories in CONFIG order
+  const catKeys=Object.keys(CONFIG.categories);
+  catKeys.forEach(catId=>{
+    const cat=CONFIG.categories[catId];
+    const tasks=allTasks.filter(t=>t.cat===catId);
+    const completed=tasks.filter(t=>state.dailyTasks[t.id]).length;
+    html+='<div class="quest-section" style="border-left:4px solid '+cat.color+'">';
+    html+='<div class="cat-header"><span class="cat-title">'+cat.label+'</span><span class="cat-count">'+completed+'/'+tasks.length+'</span></div>';
+    tasks.forEach(t=>{
+      if(editingTaskId===t.id){
+        html+=renderEditForm(t);
+        return;
+      }
+      const done=state.dailyTasks[t.id];
+      const customTag=t.custom?'<span class="custom-tag">自定义</span>':'';
+      html+='<div class="quest-item'+(done?' completed':'')+'" onclick="toggleDaily(\''+t.id+'\','+t.xp+')">';
+      html+='<div class="quest-checkbox"><span class="quest-check-icon">V</span></div>';
+      html+='<div class="quest-content"><div class="quest-title">'+t.title+customTag+'</div><div class="quest-desc">'+(t.desc||'')+'</div></div>';
+      html+='<span class="quest-xp">+'+t.xp+' XP</span>';
+      html+='<div class="quest-edit" onclick="event.stopPropagation();showEditForm(\''+t.id+'\')" title="编辑任务">&#9998;</div>';
+      html+='<div class="quest-delete" onclick="event.stopPropagation();deleteTask(\''+t.id+'\')" title="删除任务">&times;</div>';
+      html+='</div>';
+    });
+    if(tasks.length===0){
+      html+='<div style="padding:8px 0;font-size:13px;color:#94a3b8;text-align:center">暂无任务，点击下方添加</div>';
+    }
+    html+='<div class="add-task-btn" data-add-cat="'+catId+'" onclick="showAddForm(\''+catId+'\')"><span>+</span> 添加任务</div>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
+function renderPhaseTasks(){
+  if(!CONFIG.phases||CONFIG.phases.length===0)return;
+  const phaseIdx=state.currentPhase||0;
+  const phase=CONFIG.phases[phaseIdx];
+  const select=document.getElementById('phaseSelect');
+  let opts='';
+  CONFIG.phases.forEach((p,i)=>{
+    const completed=p.tasks.filter(t=>state.weeklyTasks[t.id]).length;
+    opts+='<option value="'+i+'"'+(i===phaseIdx?' selected':'')+'>'+p.name+' ('+completed+'/'+p.tasks.length+')</option>';
+  });
+  select.innerHTML=opts;
+
+  document.getElementById('phaseInfo').textContent=phase.desc+' · '+phase.weeks;
+
+  const container=document.getElementById('phaseTasks');
+  let html='';
+  phase.tasks.forEach(t=>{
+    const done=state.weeklyTasks[t.id];
+    html+='<div class="quest-item'+(done?' completed':'')+'" onclick="toggleWeekly(\''+t.id+'\','+t.xp+')">';
+    html+='<div class="quest-checkbox"><span class="quest-check-icon">V</span></div>';
+    html+='<div class="quest-content"><div class="quest-title">'+t.title+'</div></div>';
+    html+='<span class="quest-xp">+'+t.xp+' XP</span>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
+function renderAchievements(){
+  const container=document.getElementById('achieveGrid');
+  let html='';
+  CONFIG.achievements.forEach(a=>{
+    const unlocked=state.achievements[a.id];
+    html+='<div class="achieve-item '+((unlocked?'unlocked':'locked'))+'">';
+    html+='<div class="achieve-name">'+a.name+'</div>';
+    html+='<div class="achieve-desc">'+a.desc+'</div>';
+    html+='</div>';
+  });
+  container.innerHTML=html;
+}
+
+document.getElementById('phaseSelect').addEventListener('change',function(){
+  state.currentPhase=parseInt(this.value);
+  saveState();updateUI();
+});
+
+loadState();updateUI();
+
+// Auto-detect day change
+let _lastDate=getToday();
+setInterval(function(){
+  const now=getToday();
+  if(now!==_lastDate){
+    _lastDate=now;
+    loadState();
+    updateUI();
+  }
+},30000);
+</script>
+</body>
+</html>
