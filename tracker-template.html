@@ -26,12 +26,44 @@ body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-s
 .focus-title{font-size:14px;font-weight:500;color:#1e40af;margin-bottom:4px}
 .focus-desc{font-size:13px;color:#64748b}
 
+.yr-section{background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:12px;padding:14px 18px;margin-bottom:14px;border:1px solid #fcd34d}
+.yr-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.yr-icon{font-size:18px}
+.yr-title{font-size:15px;font-weight:600;color:#92400e}
+.yr-stats{display:flex;gap:12px;margin-bottom:10px}
+.yr-stat{text-align:center;flex:1}
+.yr-stat-num{display:block;font-size:22px;font-weight:700;color:#92400e}
+.yr-stat-label{font-size:11px;color:#a16207}
+.yr-tasks-label{font-size:12px;color:#92400e;margin-bottom:6px;font-weight:500}
+.yr-task-list{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:10px}
+.yr-task{font-size:11px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,0.6);color:#92400e}
+.yr-task.completed{background:#d1fae5;color:#065f46}
+.yr-encourage{font-size:13px;color:#78350f;font-style:italic}
+
 .progress-section{background:#fff;border-radius:12px;padding:14px 18px;margin-bottom:14px}
 .progress-bar-wrap{background:#e2e8f0;border-radius:8px;height:12px;overflow:hidden;margin-bottom:8px}
 .progress-bar-fill{background:linear-gradient(90deg,#3b82f6,#0f6e56);height:100%;border-radius:8px;transition:width 0.5s ease}
 .progress-text{font-size:13px;color:#64748b;display:flex;justify-content:space-between}
+.progress-top-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-label{font-size:14px;font-weight:500;color:#1e293b}
+.sort-btn{font-size:13px;padding:5px 14px;border-radius:8px;border:1px solid #cbd5e1;background:#f8fafc;color:#475569;cursor:pointer;transition:all 0.2s;white-space:nowrap;font-family:inherit}
+.sort-btn:hover{border-color:#3b82f6;color:#3b82f6;background:#eff6ff}
+.sort-btn.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+.sort-hint{background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:13px;color:#92400e;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sort-hint .done-btn{background:#92400e;color:#fff;border:none;padding:5px 16px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit;white-space:nowrap}
+.drag-handle{color:#94a3b8;margin-right:8px;font-size:16px;flex-shrink:0;cursor:grab}
+.quest-item.draggable{cursor:grab}
+.quest-item.draggable:active{cursor:grabbing}
+.quest-item.dragging{opacity:0.3}
+.quest-item.drag-over-top{box-shadow:inset 0 3px 0 #3b82f6}
+.quest-item.drag-over-bottom{box-shadow:inset 0 -3px 0 #3b82f6}
+.quest-section.drop-target{background:#eff6ff}
 
 .quest-section{background:#fff;border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.quest-section.morning{border-left:4px solid #f59e0b}
+.quest-section.core{border-left:4px solid #ef4444}
+.quest-section.ops{border-left:4px solid #3b82f6}
+.quest-section.evening{border-left:4px solid #22c55e}
 .cat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .cat-title{font-size:15px;font-weight:500;color:#1e293b}
 .cat-count{font-size:12px;color:#94a3b8}
@@ -42,11 +74,12 @@ body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-s
 .quest-item.completed .quest-checkbox{background:#22c55e;border-color:#22c55e}
 .quest-check-icon{color:#fff;font-size:14px;font-weight:500;display:none}
 .quest-item.completed .quest-check-icon{display:block}
-.quest-content{flex:1}
+.quest-content{flex:1;min-width:0}
 .quest-title{font-size:14px;font-weight:500;color:#1e293b;transition:all 0.2s}
 .quest-item.completed .quest-title{text-decoration:line-through;color:#94a3b8}
 .quest-desc{font-size:12px;color:#64748b}
 .custom-tag{font-size:10px;background:#e0e7ff;color:#4338ca;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle}
+.once-tag{font-size:10px;background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:4px;margin-left:6px;vertical-align:middle}
 .quest-xp{font-size:12px;font-weight:500;color:#f59e0b;margin-left:auto;flex-shrink:0;padding-left:8px}
 .quest-item.completed .quest-xp{color:#94a3b8}
 .quest-delete{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px;color:#cbd5e1;font-size:16px;cursor:pointer;border-radius:4px;transition:all 0.15s}
@@ -63,7 +96,7 @@ body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-s
 .add-task-form label{font-size:12px;color:#64748b;margin-bottom:3px;display:block}
 .form-row{display:flex;gap:8px;margin-bottom:8px}
 .form-row>div{flex:1}
-.form-row>div:last-child{flex:0 0 80px}
+.form-row>div:last-child{flex:0 0 90px}
 .form-actions{display:flex;gap:8px;justify-content:flex-end}
 .form-btn{padding:6px 16px;border-radius:6px;font-size:13px;cursor:pointer;border:none;font-family:inherit}
 .form-btn.primary{background:#3b82f6;color:#fff}
@@ -93,6 +126,14 @@ body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-s
 .achieve-desc{font-size:11px}
 
 .footer{text-align:center;padding:16px;font-size:12px;color:#94a3b8;margin-top:8px}
+
+.sync-row{display:flex;align-items:center;justify-content:center;gap:6px;padding:6px;font-size:11px;color:#94a3b8}
+.sync-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.sync-dot.synced{background:#22c55e}
+.sync-dot.off{background:#cbd5e1}
+.sync-dot.error{background:#ef4444}
+.sync-row a{color:#3b82f6;text-decoration:none;cursor:pointer}
+.sync-row a:hover{text-decoration:underline}
 
 @media(max-width:400px){
   .app{padding:10px}
@@ -125,7 +166,13 @@ body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-s
     <div class="focus-desc" id="focusDesc"></div>
   </div>
 
+  <div class="yr-section" id="yesterdayReport" style="display:none"></div>
+
   <div class="progress-section">
+    <div class="progress-top-row">
+      <span class="progress-label">今日进度</span>
+      <button class="sort-btn" id="sortBtn" onclick="toggleSortMode()">排序</button>
+    </div>
     <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-text">
       <span id="progressCount">今日完成: 0/0</span>
@@ -150,6 +197,7 @@ body{font-family:-apple-system,'Segoe UI','PingFang SC','Microsoft YaHei',sans-s
   </div>
 
   <div class="footer" id="footerText"></div>
+  <div class="sync-row" id="syncStatus"></div>
 </div>
 
 <script>
@@ -207,31 +255,50 @@ const CONFIG = {
       "tasks":[{"id":"p3t1","title":"优化和迭代","xp":30},{"id":"p3t2","title":"复盘和调整","xp":20}]}
   ],
   dayThemes: {
-    "0":{"title":"周日 · 休息日","desc":"完全休息，恢复精力。只完成生活类任务即可"},
-    "1":{"title":"周一 · 规划日","desc":"制定周计划，回顾上周"},
-    "2":{"title":"周二 · 深度日","desc":"全天深度工作，专注最重要的事"},
-    "3":{"title":"周三 · 实验日","desc":"新方法测试、策略优化"},
-    "4":{"title":"周四 · 沟通日","desc":"对外沟通、合作对接"},
-    "5":{"title":"周五 · 复盘日","desc":"数据分析、周复盘、调整计划"},
-    "6":{"title":"周六 · 学习日","desc":"深度学习、行业研究"}
+    "0":{"title":"周日 · 休息日","desc":"完全休息，恢复精力。只完成生活类任务即可","color":"#64748b"},
+    "1":{"title":"周一 · 规划日","desc":"制定周计划，回顾上周","color":"#1e40af"},
+    "2":{"title":"周二 · 深度日","desc":"全天深度工作，专注最重要的事","color":"#ef4444"},
+    "3":{"title":"周三 · 实验日","desc":"新方法测试、策略优化","color":"#0f6e56"},
+    "4":{"title":"周四 · 沟通日","desc":"对外沟通、合作对接","color":"#3b82f6"},
+    "5":{"title":"周五 · 复盘日","desc":"数据分析、周复盘、调整计划","color":"#f59e0b"},
+    "6":{"title":"周六 · 学习日","desc":"深度学习、行业研究","color":"#22c55e"}
   },
   footerText: "每完成一个任务，你都在为目标铺路。坚持就是最大的杠杆。"
 };
 // ============================================================
 
-// Set page title
 document.title = CONFIG.title;
 
-// Dynamic task list: default + custom - deleted, with edit overrides
+// Dynamic task list: default + custom - deleted - completed one-time, with edit overrides
 function getAllTasks(){
   const deleted = state.deletedTasks || [];
   const custom = state.customTasks || [];
   const overrides = state.editOverrides || {};
+  const completedOneTime = state.completedOneTime || [];
   const merged = [...CONFIG.defaultTasks, ...custom].map(t => {
     if(overrides[t.id]) return {...t, ...overrides[t.id]};
     return t;
   });
-  return merged.filter(t => !deleted.includes(t.id));
+  return merged.filter(t => {
+    if(deleted.includes(t.id)) return false;
+    if(t.repeat === false && completedOneTime.includes(t.id)) return false;
+    return true;
+  });
+}
+
+function getTasksByCat(catId){
+  const tasks = getAllTasks().filter(t => t.cat === catId);
+  const order = (state.taskOrder && state.taskOrder[catId]) || [];
+  const ordered = [];
+  const unordered = [];
+  order.forEach(id => {
+    const t = tasks.find(t => t.id === id);
+    if(t) ordered.push(t);
+  });
+  tasks.forEach(t => {
+    if(!order.includes(t.id)) unordered.push(t);
+  });
+  return [...ordered, ...unordered];
 }
 
 function getTotalDailyXP(){
@@ -329,9 +396,13 @@ let state={
   customTasks:[],
   deletedTasks:[],
   editOverrides:{},
+  taskOrder:{},
+  completedOneTime:[],
 };
 
 let editingTaskId = null;
+let sortMode = false;
+let draggedTaskId = null;
 
 function loadState(){
   try{
@@ -342,11 +413,24 @@ function loadState(){
       if(!state.customTasks)state.customTasks=[];
       if(!state.deletedTasks)state.deletedTasks=[];
       if(!state.editOverrides)state.editOverrides={};
+      if(!state.taskOrder)state.taskOrder={};
+      if(!state.completedOneTime)state.completedOneTime=[];
     }
   }catch(e){}
   const today=getToday();
   if(state.lastActiveDate!==today){
     if(state.lastActiveDate){
+      // Save completed one-time tasks before daily reset
+      const allTasksBeforeReset=[...CONFIG.defaultTasks,...(state.customTasks||[])]
+        .map(t=>{const o=(state.editOverrides||{})[t.id];return o?{...t,...o}:t})
+        .filter(t=>!(state.deletedTasks||[]).includes(t.id));
+      allTasksBeforeReset.forEach(t=>{
+        if(t.repeat===false&&state.dailyTasks[t.id]){
+          if(!state.completedOneTime)state.completedOneTime=[];
+          if(!state.completedOneTime.includes(t.id))state.completedOneTime.push(t.id);
+        }
+      });
+      // Save history
       const completed=getDailyCompleted(state);
       const xp=getDailyXP(state);
       if(completed>0){
@@ -378,6 +462,131 @@ function loadState(){
 
 function saveState(){
   try{localStorage.setItem(CONFIG.storageKey,JSON.stringify(state))}catch(e){}
+  syncToFile();
+}
+
+// ---- File sync: export progress so automation can read it ----
+const supportsFSAccess='showSaveFilePicker'in window;
+let fileHandle=null;
+
+function openIDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open('taskTrackerIDB',1);
+    req.onupgradeneeded=e=>{e.target.result.createObjectStore('settings')};
+    req.onsuccess=e=>resolve(e.target.result);
+    req.onerror=e=>reject(e);
+  });
+}
+async function getSavedHandle(){
+  try{
+    const db=await openIDB();
+    return new Promise(resolve=>{
+      const tx=db.transaction('settings','readonly');
+      const req=tx.objectStore('settings').get('progressFile');
+      req.onsuccess=()=>resolve(req.result||null);
+      req.onerror=()=>resolve(null);
+    });
+  }catch(e){return null}
+}
+async function saveHandle(handle){
+  try{
+    const db=await openIDB();
+    return new Promise(resolve=>{
+      const tx=db.transaction('settings','readwrite');
+      tx.objectStore('settings').put(handle,'progressFile');
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>resolve();
+    });
+  }catch(e){}
+}
+async function chooseSyncFile(){
+  if(!supportsFSAccess){downloadProgress();return}
+  try{
+    fileHandle=await window.showSaveFilePicker({
+      suggestedName:'progress.json',
+      types:[{description:'JSON',accept:{'application/json':['.json']}}]
+    });
+    await saveHandle(fileHandle);
+    await syncToFile();
+    updateSyncStatus('synced');
+  }catch(e){}
+}
+async function syncToFile(){
+  if(!fileHandle)return;
+  try{
+    const exportData={
+      ...state,
+      _taskNames:getAllTasks().map(t=>({id:t.id,title:t.title,xp:t.xp,cat:t.cat})),
+      _exportedAt:new Date().toISOString()
+    };
+    const writable=await fileHandle.createWritable();
+    await writable.write(JSON.stringify(exportData,null,2));
+    await writable.close();
+  }catch(e){updateSyncStatus('error')}
+}
+function downloadProgress(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='progress.json';a.click();
+  URL.revokeObjectURL(url);
+}
+function updateSyncStatus(status){
+  const el=document.getElementById('syncStatus');
+  if(!el)return;
+  if(status==='synced')el.innerHTML='<span class="sync-dot synced"></span>进度已自动同步，每日提醒可读取';
+  else if(status==='off')el.innerHTML='<span class="sync-dot off"></span><a onclick="chooseSyncFile();return false">开启进度同步</a> · 让每日提醒自动读取完成情况';
+  else if(status==='unsupported')el.innerHTML='<span class="sync-dot off"></span><a onclick="downloadProgress();return false">保存进度到文件</a> · 放到本目录下让提醒读取';
+  else if(status==='error')el.innerHTML='<span class="sync-dot error"></span>同步失败 <a onclick="chooseSyncFile();return false">重试</a>';
+}
+async function initFileSync(){
+  if(!supportsFSAccess){updateSyncStatus('unsupported');return}
+  fileHandle=await getSavedHandle();
+  if(fileHandle){
+    try{
+      const perm=await fileHandle.queryPermission({mode:'readwrite'});
+      if(perm==='granted'){updateSyncStatus('synced');await syncToFile();return}
+      const req=await fileHandle.requestPermission({mode:'readwrite'});
+      if(req==='granted'){updateSyncStatus('synced');await syncToFile();return}
+    }catch(e){}
+    updateSyncStatus('off');
+  }else{
+    updateSyncStatus('off');
+  }
+}
+
+function renderYesterdayReport(){
+  const container=document.getElementById('yesterdayReport');
+  if(!container)return;
+  const yesterday=getYesterday();
+  const yData=state.history?state.history[yesterday]:null;
+  if(!yData||yData.completed===0){container.style.display='none';return}
+  container.style.display='block';
+  const allTasks=getAllTasks();
+  const completedIds=yData.completedIds||(yData.tasks?Object.keys(yData.tasks).filter(k=>yData.tasks[k]):[]);
+  let html='<div class="yr-header"><span class="yr-icon">📊</span><span class="yr-title">昨日战报</span></div>';
+  html+='<div class="yr-stats">';
+  html+='<div class="yr-stat"><span class="yr-stat-num">'+yData.completed+'</span><span class="yr-stat-label">任务完成</span></div>';
+  html+='<div class="yr-stat"><span class="yr-stat-num">'+yData.xp+'</span><span class="yr-stat-label">获得XP</span></div>';
+  html+='<div class="yr-stat"><span class="yr-stat-num">'+(state.streak||0)+'</span><span class="yr-stat-label">连续打卡</span></div>';
+  html+='</div>';
+  if(completedIds.length>0){
+    html+='<div class="yr-tasks-label">完成的任务：</div>';
+    html+='<div class="yr-task-list">';
+    completedIds.forEach(id=>{
+      const t=allTasks.find(t=>t.id===id);
+      if(t)html+='<div class="yr-task completed">'+t.title+'</div>';
+    });
+    html+='</div>';
+  }
+  const rate=allTasks.length>0?yData.completed/allTasks.length:0;
+  let encourage='';
+  if(rate>=1)encourage='完美全勤！昨天的你太强了，继续保持这个势头！';
+  else if(rate>=0.7)encourage='完成率很高，状态在线，今天继续冲！';
+  else if(rate>=0.4)encourage='有进展就是好事，今天多完成几个！';
+  else encourage='昨天迈出了第一步，今天争取多做几个！';
+  html+='<div class="yr-encourage">'+encourage+'</div>';
+  container.innerHTML=html;
 }
 
 function toggleDaily(taskId,xp){
@@ -405,9 +614,9 @@ function toggleWeekly(taskId,xp){
   saveState();updateUI();checkAllAchievements();
 }
 
-function addCustomTask(title,desc,cat,xp){
+function addCustomTask(title,desc,cat,xp,repeat){
   const id='custom_'+Date.now();
-  const task={id,cat,title,xp:parseInt(xp)||10,desc:desc||'',custom:true};
+  const task={id,cat,title,xp:parseInt(xp)||10,desc:desc||'',custom:true,repeat:repeat!==false};
   state.customTasks.push(task);
   saveState();updateUI();
 }
@@ -436,7 +645,6 @@ function showAddForm(catId){
   btn.style.display='none';
   const form=document.createElement('div');
   form.className='add-task-form';
-  // Build category select from CONFIG
   let catOptions='';
   for(const [key,val] of Object.entries(CONFIG.categories)){
     catOptions+='<option value="'+key+'"'+(catId===key?' selected':'')+'>'+val.label+'</option>';
@@ -452,6 +660,11 @@ function showAddForm(catId){
     '<div><label>XP</label>'+
     '<input type="number" id="newTaskXP" value="15" min="5" max="50" style="width:100%"></div>'+
     '</div>'+
+    '<label>重复类型</label>'+
+    '<select id="newTaskRepeat">'+
+    '<option value="true">每天重复（第二天继续出现）</option>'+
+    '<option value="false">仅做一次（完成后不再出现）</option>'+
+    '</select>'+
     '<div class="form-actions">'+
     '<button class="form-btn secondary" onclick="cancelAddForm()">取消</button>'+
     '<button class="form-btn primary" onclick="confirmAddTask()">添加</button>'+
@@ -470,12 +683,14 @@ function confirmAddTask(){
   const desc=document.getElementById('newTaskDesc').value.trim();
   const cat=document.getElementById('newTaskCat').value;
   const xp=document.getElementById('newTaskXP').value;
+  const repeat=document.getElementById('newTaskRepeat').value==='true';
   if(!title){alert('请输入任务名称');return}
-  addCustomTask(title,desc,cat,xp);
+  addCustomTask(title,desc,cat,xp,repeat);
   cancelAddForm();
 }
 
 function showEditForm(taskId){
+  if(sortMode) return;
   editingTaskId = taskId;
   updateUI();
   setTimeout(()=>{
@@ -494,11 +709,13 @@ function confirmEditTask(taskId){
   const descEl=document.getElementById('editTaskDesc');
   const catEl=document.getElementById('editTaskCat');
   const xpEl=document.getElementById('editTaskXP');
+  const repeatEl=document.getElementById('editTaskRepeat');
   if(!titleEl)return;
   const title=titleEl.value.trim();
   const desc=descEl.value.trim();
   const cat=catEl.value;
   const xp=parseInt(xpEl.value)||10;
+  const repeat=repeatEl.value==='true';
   if(!title){alert('请输入任务名称');return}
 
   const task=getAllTasks().find(t=>t.id===taskId);
@@ -509,14 +726,23 @@ function confirmEditTask(taskId){
     state.totalXP+=(xp-oldXP);
   }
 
+  // Handle one-time task transitions
+  if(task.repeat!==false && !repeat && state.dailyTasks[taskId]){
+    if(!state.completedOneTime)state.completedOneTime=[];
+    if(!state.completedOneTime.includes(taskId))state.completedOneTime.push(taskId);
+  }
+  if(task.repeat===false && repeat){
+    if(state.completedOneTime)state.completedOneTime=state.completedOneTime.filter(id=>id!==taskId);
+  }
+
   if(task.custom){
     const idx=state.customTasks.findIndex(t=>t.id===taskId);
     if(idx>=0){
-      state.customTasks[idx]={...state.customTasks[idx],title,desc,cat,xp};
+      state.customTasks[idx]={...state.customTasks[idx],title,desc,cat,xp,repeat};
     }
   }else{
     if(!state.editOverrides)state.editOverrides={};
-    state.editOverrides[taskId]={title,desc,cat,xp};
+    state.editOverrides[taskId]={title,desc,cat,xp,repeat};
   }
   editingTaskId=null;
   saveState();updateUI();
@@ -528,6 +754,7 @@ function renderEditForm(t){
   for(const [key,val] of Object.entries(CONFIG.categories)){
     catOptions+='<option value="'+key+'"'+(t.cat===key?' selected':'')+'>'+val.label+'</option>';
   }
+  const isRecurring=t.repeat!==false;
   let html='<div class="add-task-form edit-task-form">';
   html+='<label>任务名称</label>';
   html+='<input type="text" id="editTaskTitle" placeholder="任务名称" maxlength="40" value="'+esc(t.title)+'">';
@@ -539,6 +766,11 @@ function renderEditForm(t){
   html+='<div><label>XP</label>';
   html+='<input type="number" id="editTaskXP" value="'+t.xp+'" min="5" max="50" style="width:100%"></div>';
   html+='</div>';
+  html+='<label>重复类型</label>';
+  html+='<select id="editTaskRepeat">';
+  html+='<option value="true"'+(isRecurring?' selected':'')+'>每天重复（第二天继续出现）</option>';
+  html+='<option value="false"'+(!isRecurring?' selected':'')+'>仅做一次（完成后不再出现）</option>';
+  html+='</select>';
   html+='<div class="form-actions">';
   html+='<button class="form-btn secondary" onclick="cancelEditForm()">取消</button>';
   html+='<button class="form-btn primary" onclick="confirmEditTask(\''+t.id+'\')">保存</button>';
@@ -596,11 +828,13 @@ function updateUI(){
   const dayNames=['周日','周一','周二','周三','周四','周五','周六'];
   document.getElementById('dateText').textContent=today.getFullYear()+'/'+(today.getMonth()+1)+'/'+today.getDate()+' '+dayNames[getDayOfWeek()];
 
-  // Day theme
+  // Day theme with color
   const dow=String(getDayOfWeek());
-  const theme=CONFIG.dayThemes[dow]||CONFIG.dayThemes["1"]||{"title":"工作日","desc":"按计划执行"};
+  const theme=CONFIG.dayThemes[dow]||CONFIG.dayThemes["1"]||{"title":"工作日","desc":"按计划执行","color":"#1e40af"};
   document.getElementById('focusTitle').textContent=theme.title;
   document.getElementById('focusDesc').textContent=theme.desc;
+  document.getElementById('focusBanner').style.borderLeftColor=theme.color;
+  document.getElementById('focusTitle').style.color=theme.color;
 
   const dailyCompleted=getDailyCompleted(state);
   const dailyXPVal=getDailyXP(state);
@@ -617,25 +851,139 @@ function updateUI(){
     phaseSection.style.display='none';
   }
 
-  // Footer
   document.getElementById('footerText').textContent=CONFIG.footerText;
 
   renderDailyQuests();
   renderPhaseTasks();
   renderAchievements();
+  renderYesterdayReport();
+}
+
+function toggleSortMode(){
+  sortMode=!sortMode;
+  if(sortMode){editingTaskId=null}
+  const btn=document.getElementById('sortBtn');
+  if(sortMode){btn.textContent='完成';btn.classList.add('active')}
+  else{btn.textContent='排序';btn.classList.remove('active')}
+  updateUI();
+}
+
+// Drag-and-drop handlers
+function onDragStart(e,taskId){
+  draggedTaskId=taskId;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed='move';
+}
+function onDragEnd(e){
+  e.target.classList.remove('dragging');
+  document.querySelectorAll('.drag-over-top,.drag-over-bottom').forEach(el=>{el.classList.remove('drag-over-top');el.classList.remove('drag-over-bottom')});
+  document.querySelectorAll('.drop-target').forEach(el=>el.classList.remove('drop-target'));
+  draggedTaskId=null;
+}
+function onDragOverItem(e,taskId){
+  e.preventDefault();
+  if(taskId===draggedTaskId)return;
+  e.dataTransfer.dropEffect='move';
+  const rect=e.currentTarget.getBoundingClientRect();
+  const midY=rect.top+rect.height/2;
+  e.currentTarget.classList.remove('drag-over-top','drag-over-bottom');
+  if(e.clientY<midY)e.currentTarget.classList.add('drag-over-top');
+  else e.currentTarget.classList.add('drag-over-bottom');
+}
+function onDragLeaveItem(e){
+  e.currentTarget.classList.remove('drag-over-top','drag-over-bottom');
+}
+function onDropItem(e,targetTaskId){
+  e.preventDefault();
+  e.stopPropagation();
+  if(!draggedTaskId||draggedTaskId===targetTaskId){draggedTaskId=null;return}
+  const rect=e.currentTarget.getBoundingClientRect();
+  const midY=rect.top+rect.height/2;
+  const insertBefore=e.clientY<midY;
+  moveTaskToPosition(draggedTaskId,targetTaskId,insertBefore);
+  draggedTaskId=null;
+}
+function onDragOverSection(e,catId){
+  e.preventDefault();
+  e.dataTransfer.dropEffect='move';
+  e.currentTarget.classList.add('drop-target');
+}
+function onDragLeaveSection(e){
+  e.currentTarget.classList.remove('drop-target');
+}
+function onDropSection(e,catId){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drop-target');
+  if(!draggedTaskId)return;
+  const task=getAllTasks().find(t=>t.id===draggedTaskId);
+  if(!task){draggedTaskId=null;return}
+  if(task.cat!==catId){
+    changeTaskCategory(draggedTaskId,catId);
+    updateUI();
+  }
+  draggedTaskId=null;
+}
+
+function changeTaskCategory(taskId,newCat){
+  const task=getAllTasks().find(t=>t.id===taskId);
+  if(!task)return;
+  const oldCat=task.cat;
+  if(state.taskOrder&&state.taskOrder[oldCat]){
+    state.taskOrder[oldCat]=state.taskOrder[oldCat].filter(id=>id!==taskId);
+  }
+  if(task.custom){
+    const idx=state.customTasks.findIndex(t=>t.id===taskId);
+    if(idx>=0)state.customTasks[idx].cat=newCat;
+  }else{
+    if(!state.editOverrides)state.editOverrides={};
+    if(!state.editOverrides[taskId])state.editOverrides[taskId]={};
+    state.editOverrides[taskId].cat=newCat;
+  }
+  if(!state.taskOrder)state.taskOrder={};
+  if(!state.taskOrder[newCat])state.taskOrder[newCat]=[];
+  if(!state.taskOrder[newCat].includes(taskId))state.taskOrder[newCat].push(taskId);
+  saveState();
+}
+
+function moveTaskToPosition(draggedId,targetId,insertBefore){
+  const draggedTask=getAllTasks().find(t=>t.id===draggedId);
+  const targetTask=getAllTasks().find(t=>t.id===targetId);
+  if(!draggedTask||!targetTask)return;
+  if(draggedTask.cat!==targetTask.cat){
+    changeTaskCategory(draggedId,targetTask.cat);
+  }
+  const catId=targetTask.cat;
+  const allInCat=getTasksByCat(catId);
+  const ids=allInCat.map(t=>t.id);
+  const filtered=ids.filter(id=>id!==draggedId);
+  const targetIdx=filtered.indexOf(targetId);
+  if(targetIdx<0){
+    filtered.push(draggedId);
+  }else{
+    filtered.splice(insertBefore?targetIdx:targetIdx+1,0,draggedId);
+  }
+  if(!state.taskOrder)state.taskOrder={};
+  state.taskOrder[catId]=filtered;
+  saveState();
+  updateUI();
 }
 
 function renderDailyQuests(){
   const container=document.getElementById('questSections');
   let html='';
-  const allTasks=getAllTasks();
-  // Render categories in CONFIG order
+  if(sortMode){
+    html+='<div class="sort-hint"><span>\u2702 排序模式：拖拽任务调整顺序，可跨分类移动</span><button class="done-btn" onclick="toggleSortMode()">完成排序</button></div>';
+  }
   const catKeys=Object.keys(CONFIG.categories);
   catKeys.forEach(catId=>{
     const cat=CONFIG.categories[catId];
-    const tasks=allTasks.filter(t=>t.cat===catId);
+    const tasks=getTasksByCat(catId);
     const completed=tasks.filter(t=>state.dailyTasks[t.id]).length;
-    html+='<div class="quest-section" style="border-left:4px solid '+cat.color+'">';
+    const sectionAttrs=sortMode?
+      ' ondragover="onDragOverSection(event,\''+catId+'\')"'+
+      ' ondragleave="onDragLeaveSection(event)"'+
+      ' ondrop="onDropSection(event,\''+catId+'\')"':'';
+    html+='<div class="quest-section '+catId+'"'+sectionAttrs+'>';
     html+='<div class="cat-header"><span class="cat-title">'+cat.label+'</span><span class="cat-count">'+completed+'/'+tasks.length+'</span></div>';
     tasks.forEach(t=>{
       if(editingTaskId===t.id){
@@ -644,18 +992,35 @@ function renderDailyQuests(){
       }
       const done=state.dailyTasks[t.id];
       const customTag=t.custom?'<span class="custom-tag">自定义</span>':'';
-      html+='<div class="quest-item'+(done?' completed':'')+'" onclick="toggleDaily(\''+t.id+'\','+t.xp+')">';
-      html+='<div class="quest-checkbox"><span class="quest-check-icon">V</span></div>';
-      html+='<div class="quest-content"><div class="quest-title">'+t.title+customTag+'</div><div class="quest-desc">'+(t.desc||'')+'</div></div>';
-      html+='<span class="quest-xp">+'+t.xp+' XP</span>';
-      html+='<div class="quest-edit" onclick="event.stopPropagation();showEditForm(\''+t.id+'\')" title="编辑任务">&#9998;</div>';
-      html+='<div class="quest-delete" onclick="event.stopPropagation();deleteTask(\''+t.id+'\')" title="删除任务">&times;</div>';
-      html+='</div>';
+      const onceTag=t.repeat===false?'<span class="once-tag">一次性</span>':'';
+      if(sortMode){
+        html+='<div class="quest-item draggable'+(done?' completed':'')+'" draggable="true"'+
+          ' ondragstart="onDragStart(event,\''+t.id+'\')"'+
+          ' ondragend="onDragEnd(event)"'+
+          ' ondragover="onDragOverItem(event,\''+t.id+'\')"'+
+          ' ondragleave="onDragLeaveItem(event)"'+
+          ' ondrop="onDropItem(event,\''+t.id+'\')">';
+        html+='<span class="drag-handle">\u2630</span>';
+        html+='<div class="quest-checkbox"><span class="quest-check-icon">V</span></div>';
+        html+='<div class="quest-content"><div class="quest-title">'+t.title+customTag+onceTag+'</div><div class="quest-desc">'+(t.desc||'')+'</div></div>';
+        html+='<span class="quest-xp">+'+t.xp+' XP</span>';
+        html+='</div>';
+      }else{
+        html+='<div class="quest-item'+(done?' completed':'')+'" onclick="toggleDaily(\''+t.id+'\','+t.xp+')">';
+        html+='<div class="quest-checkbox"><span class="quest-check-icon">V</span></div>';
+        html+='<div class="quest-content"><div class="quest-title">'+t.title+customTag+onceTag+'</div><div class="quest-desc">'+(t.desc||'')+'</div></div>';
+        html+='<span class="quest-xp">+'+t.xp+' XP</span>';
+        html+='<div class="quest-edit" onclick="event.stopPropagation();showEditForm(\''+t.id+'\')" title="编辑任务">&#9998;</div>';
+        html+='<div class="quest-delete" onclick="event.stopPropagation();deleteTask(\''+t.id+'\')" title="删除任务">&times;</div>';
+        html+='</div>';
+      }
     });
     if(tasks.length===0){
-      html+='<div style="padding:8px 0;font-size:13px;color:#94a3b8;text-align:center">暂无任务，点击下方添加</div>';
+      html+='<div style="padding:12px 0;font-size:13px;color:#94a3b8;text-align:center">'+(sortMode?'拖拽任务到这里':'暂无任务，点击下方添加')+'</div>';
     }
-    html+='<div class="add-task-btn" data-add-cat="'+catId+'" onclick="showAddForm(\''+catId+'\')"><span>+</span> 添加任务</div>';
+    if(!sortMode){
+      html+='<div class="add-task-btn" data-add-cat="'+catId+'" onclick="showAddForm(\''+catId+'\')"><span>+</span> 添加任务</div>';
+    }
     html+='</div>';
   });
   container.innerHTML=html;
@@ -706,9 +1071,9 @@ document.getElementById('phaseSelect').addEventListener('change',function(){
   saveState();updateUI();
 });
 
-loadState();updateUI();
+loadState();updateUI();initFileSync();
 
-// Auto-detect day change
+// Auto-detect day change without requiring page refresh
 let _lastDate=getToday();
 setInterval(function(){
   const now=getToday();
